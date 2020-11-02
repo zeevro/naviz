@@ -53,7 +53,7 @@ function newAngle(deg) {
 function updateNavData() {
   if (!waypointSelect.selectedOptions.length) return;
   var waypoint = points[waypointSelect.selectedOptions[0].value];
-  var bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, waypoint.lat, waypoint.lon) - currentCoords.heading;
+  var bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, waypoint.lat, waypoint.lon) - (currentCoords.heading || 0);
   var distance = GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, waypoint.lat, waypoint.lon);
   document.getElementById('bearing').innerHTML = bearing.toFixed(2);
   document.getElementById('distance').innerHTML = distance.toFixed(2) + ' km';
@@ -71,8 +71,8 @@ navigator.geolocation.watchPosition(
     currentCoords = position.coords;
     console.log(currentCoords.latitude, currentCoords.longitude, currentCoords.speed, currentCoords.heading);
     document.getElementById('location').innerHTML = currentCoords.latitude.toFixed(6) + ', ' + currentCoords.longitude.toFixed(6);
-    document.getElementById('speed').innerHTML = currentCoords.speed.toFixed(2);
-    document.getElementById('heading').innerHTML = currentCoords.heading.toFixed(2);
+    document.getElementById('speed').innerHTML = (currentCoords.speed || 0).toFixed(2);
+    document.getElementById('heading').innerHTML = (currentCoords.heading || 0).toFixed(2);
     updateNavData();
     var angle = position.coords.heading;
     if (angle === null || angle === NaN || angle === undefined) return;
