@@ -15,3 +15,7 @@ svg {
 .larger {
   font-size: larger;
 }
+
+.center {
+  text-align: center;
+}
