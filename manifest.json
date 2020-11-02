@@ -1,0 +1,32 @@
+{
+  "name": "NaviZ",
+  "short_name": "NaviZ",
+  "theme_color": "#2196f3",
+  "background_color": "#2196f3",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "icons/compass-32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "icons/compass-64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "icons/compass-128.png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "icons/compass-256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "icons/compass-512.png",
+      "sizes": "512x512"
+    }
+  ]
+}

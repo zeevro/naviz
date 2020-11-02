@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://unpkg.com/great-circle/GreatCircle.js"></script>
+
+    <title>NaviZ</title>
+  </head>
+
+
+  <body>
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <use href="/bg.svg#ticks" />
+      <use id="arrow" href="/arrow.svg#arrow" class="transition" />
+    </svg>
+
+    <div class="larger">Location: <span id="location"></span></div>
+    <div class="larger">Speed: <span id="speed"></span></div>
+    <div class="larger">Heading: <span id="heading"></span></div>
+
+    <small>Icon made by <a href="https://www.flaticon.com/authors/tomas-knop" title="Tomas Knop">Tomas Knop</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></small>
+
+    <script src="app.js"></script>
+  </body>
+
+</html>

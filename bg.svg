@@ -1,0 +1,23 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <line id="major" x1="195" y1="100" x2="175" y2="100" stroke="black" stroke-linecap="round" stroke-width="1.5" />
+    <line id="minor" x1="195" y1="100" x2="190" y2="100" stroke="black" stroke-linecap="round" stroke-width="1.5" />
+  </defs>
+
+  <g id="ticks">
+    <use href="#major" />
+    <use href="#minor" transform="rotate(30 100 100)" />
+    <use href="#minor" transform="rotate(60 100 100)" />
+    <use href="#major" transform="rotate(90 100 100)" />
+    <use href="#minor" transform="rotate(120 100 100)" />
+    <use href="#minor" transform="rotate(150 100 100)" />
+    <use href="#major" transform="rotate(180 100 100)" />
+    <use href="#minor" transform="rotate(210 100 100)" />
+    <use href="#minor" transform="rotate(240 100 100)" />
+    <use href="#major" transform="rotate(270 100 100)" />
+    <use href="#minor" transform="rotate(300 100 100)" />
+    <use href="#minor" transform="rotate(330 100 100)" />
+  </g>
+
+</svg>
