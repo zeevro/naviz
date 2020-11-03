@@ -62,10 +62,6 @@ function updateNavData() {
 
 waypointSelect.addEventListener('change', updateNavData);
 
-// setInterval(() => {
-//   newAngle((currentAngle + 360 + 30) % 360);
-// }, 500);
-
 navigator.geolocation.watchPosition(
   position => {
     currentCoords = position.coords;
@@ -78,9 +74,13 @@ navigator.geolocation.watchPosition(
     if (angle === null || angle === NaN || angle === undefined) return;
     newAngle(angle);
   },
-  console.warn,
+  console.error,
   {
     enableHighAccuracy: true,
     maximumAge: 0
   }
 );
+
+if ('wakeLock' in navigator) {
+  wakeLock = navigator.wakeLock.request('screen').catch(console.error);
+}
