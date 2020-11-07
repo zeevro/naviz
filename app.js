@@ -66,9 +66,9 @@ navigator.geolocation.watchPosition(
   position => {
     currentCoords = position.coords;
     console.log(currentCoords.latitude, currentCoords.longitude, currentCoords.speed, currentCoords.heading);
-    document.getElementById('location').innerHTML = currentCoords.latitude.toFixed(6) + ', ' + currentCoords.longitude.toFixed(6);
-    document.getElementById('speed').innerHTML = (currentCoords.speed || 0).toFixed(2);
-    document.getElementById('heading').innerHTML = (currentCoords.heading || 0).toFixed(2);
+    document.getElementById('location').innerHTML = currentCoords.latitude.toFixed(6) + ',' + currentCoords.longitude.toFixed(6);
+    document.getElementById('speed').innerHTML = (currentCoords.speed || 0).toFixed(2) + ' km/h';
+    document.getElementById('heading').innerHTML = (currentCoords.heading || 0).toFixed(2) + '&deg;';
     updateNavData();
     var angle = position.coords.heading;
     if (angle === null || angle === NaN || angle === undefined) return;
