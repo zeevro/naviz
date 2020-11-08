@@ -55,7 +55,7 @@ function pad2(n) {
 }
 
 function etaStr(speed, distance) {
-  if (!speed || !distance) return '--';
+  if (!speed || !distance || !Math.round(speed) || ! Math.round(distance)) return '--';
   let eta = Math.round(speed / distance);
   let ret = pad2(eta % 60) + 's';
   if (eta = Math.floor(eta / 60)) {
@@ -67,7 +67,7 @@ function etaStr(speed, distance) {
   return ret;
 }
 
-function showWaypointpicker() {
+function showWaypointPicker() {
   if (currentCoords !== null) {
     let waypointElems = document.querySelectorAll('div.waypoint');
     waypointElems.forEach(elem => {
@@ -115,7 +115,6 @@ function newAngle(deg) {
 }
 
 function updateNavData() {
-  document.getElementById('position').innerHTML = currentCoords.latitude.toFixed(6) + ',' + currentCoords.longitude.toFixed(6);
   document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : formatNumber(km2mile(currentCoords.speed)) + ' mph';
   document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '&deg;';
 
@@ -140,7 +139,7 @@ function updateNavData() {
   }
 }
 
-document.getElementById('waypointBtn').addEventListener('click', showWaypointpicker);
+document.getElementById('waypointBtn').addEventListener('click', showWaypointPicker);
 
 navigator.geolocation.watchPosition(
   position => {
