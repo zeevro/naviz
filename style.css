@@ -20,11 +20,7 @@ body {
 }
 
 .modal {
-  display: none;
-}
-
-.modal.active {
-  display: block;
+  visibility: hidden;
   flex-direction: column;
   width: 100%;
   height: 100%;
@@ -32,6 +28,10 @@ body {
   background-color: rgba(100, 100, 100, 0.5);
   left: 0;
   top: 0;
+}
+
+.modal.active {
+  visibility: visible;
 }
 
 .modal > .modal-content {
@@ -77,6 +77,8 @@ body {
 .modal .buttons * {
   font-size: xx-large;
   float: right;
+  margin-left: 0.2em;
+  margin-top: 0.2em;
 }
 
 .transition {

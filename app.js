@@ -78,6 +78,7 @@ function showWaypointSelector() {
       // elem.querySelector('.distance').innerHTML = '(' + formatNumber(km2mile(distance)) + '&nbsp;mi)';
     });
   }
+  document.getElementById('waypointList').scrollTop = 0;
   document.getElementById('waypointSelectorModal').classList.add('active');
 }
 
