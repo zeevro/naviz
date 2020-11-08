@@ -48,32 +48,35 @@
         <use id="arrow" href="arrow.svg#arrow" class="transition" />
       </svg>
 
-      <div class="spacer">&nbsp;</div>
+      <div class="spacer"></div>
 
-      <button id="waypointBtn" class="larger">Waypoint</button>
+      <button id="waypointBtn">Waypoint</button>
 
-      <div class="spacer">&nbsp;</div>
+      <div class="spacer"></div>
 
       <div class="row">
-        <div class="data-field larger">
+        <div class="data-field">
           <div class="field-name">Distance</div>
           <div class="field-value" id="distance">--</div>
         </div>
-        <div class="data-field larger">
+        <div class="data-field">
           <div class="field-name">ETA</div>
           <div class="field-value" id="eta">--</div>
         </div>
-        <div class="data-field larger">
+        <div class="data-field">
           <div class="field-name">Bearing</div>
           <div class="field-value" id="bearing">--</div>
         </div>
       </div>
+
+      <div class="spacer"></div>
+
       <div class="row">
-        <div class="data-field larger">
+        <div class="data-field">
           <div class="field-name">Speed</div>
           <div class="field-value" id="speed">--</div>
         </div>
-        <div class="data-field larger">
+        <div class="data-field">
           <div class="field-name">Heading</div>
           <div class="field-value" id="heading">--</div>
         </div>
@@ -89,6 +92,21 @@
         </div>
       </div>
 
+      <div id="locationPermissionModal" class="modal">
+        <div class="modal-content">
+          <div>This app does not work without location permissions.</div>
+          <div class="spacer"></div>
+          <div class="center">
+            <button id="locationPermissionBtn">Grant permission</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="locationPermissionDeniedModal" class="modal">
+        <div class="modal-content">
+          This app does not work without location permissions. You must grant the app this permission in order to use it.
+        </div>
+      </div>
     </div>
     <script src="app.js"></script>
   </body>

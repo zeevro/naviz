@@ -1,6 +1,6 @@
 window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js");
+    navigator.serviceWorker.register("service-worker.js");
   }
 });
 
@@ -8,43 +8,28 @@ var currentCoords = null;
 var currentAngle = 0;
 var currentWaypoint = null;
 
-document.querySelectorAll('.modal .close').forEach(elem => {
-  elem.addEventListener('click', e => {
-    e.target.closest('.modal').classList.remove('active');
-  })
-});
-
-document.querySelector('#waypointPickerModal .reset').addEventListener('click', e => {
-  currentWaypoint = null;
-  updateNavData();
-});
-
-document.getElementById('waypointList').addEventListener('click', e => {
-  e.target.closest('.modal').classList.remove('active');
-  currentWaypoint = e.target.dataset;
-  updateNavData();
-})
-
-fetch('points.json')
-  .then(response => response.json())
-  .then(points => {
-    let listContainer = document.getElementById('waypointList');
-    points.sort((a, b) => a.name.localeCompare(b.name));
-    points.forEach(p => {
-      let elem = document.createElement('div');
-      elem.classList.add('waypoint')
-      Object.assign(elem.dataset, p);
-      elem.innerText = p.name;
-      let arrow = document.createElement('div');
-      arrow.classList.add('arrow');
-      arrow.innerHTML = '&uarr;'
-      elem.appendChild(arrow);
-      // let distance = document.createElement('span');
-      // distance.classList.add('distance');
-      // elem.appendChild(distance);
-      listContainer.appendChild(elem);
-    })
-  });
+function loadWaypoints() {
+  fetch('points.json')
+    .then(response => response.json())
+    .then(points => {
+      let listContainer = document.getElementById('waypointList');
+      points.sort((a, b) => a.name.localeCompare(b.name));
+      points.forEach(p => {
+        let elem = document.createElement('div');
+        elem.classList.add('waypoint')
+        Object.assign(elem.dataset, p);
+        elem.innerText = p.name;
+        let arrow = document.createElement('div');
+        arrow.classList.add('arrow');
+        arrow.innerHTML = '&uarr;'
+        elem.appendChild(arrow);
+        // let distance = document.createElement('span');
+        // distance.classList.add('distance');
+        // elem.appendChild(distance);
+        listContainer.appendChild(elem);
+      })
+    });
+}
 
 function km2mile(x) {
   return x * 0.621371;
@@ -55,7 +40,7 @@ function pad2(n) {
 }
 
 function etaStr(speed, distance) {
-  if (!speed || !distance || !Math.round(speed) || ! Math.round(distance)) return '--';
+  if (!speed || !distance || !Math.round(speed) || !Math.round(distance)) return '--';
   let eta = Math.round(speed / distance);
   let ret = pad2(eta % 60) + 's';
   if (eta = Math.floor(eta / 60)) {
@@ -139,20 +124,68 @@ function updateNavData() {
   }
 }
 
-document.getElementById('waypointBtn').addEventListener('click', showWaypointPicker);
-
-navigator.geolocation.watchPosition(
-  position => {
-    currentCoords = position.coords;
-    updateNavData();
-  },
-  console.error,
-  {
-    enableHighAccuracy: true,
-    maximumAge: 0
-  }
-);
-
-if ('wakeLock' in navigator) {
-  wakeLock = navigator.wakeLock.request('screen').catch(console.error);
+function startLocationWatcher() {
+  navigator.geolocation.watchPosition(
+    position => {
+      currentCoords = position.coords;
+      updateNavData();
+    },
+    console.error,
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0
+    }
+  );
 }
+
+function handleLocationPermission(permissionStatus) {
+  if (permissionStatus.state == 'granted') {
+    startLocationWatcher();
+    return;
+  }
+
+  permissionStatus.addEventListener('change', e => handleLocationPermission(e.target));
+
+  if (permissionStatus.state == 'prompt') {
+    document.getElementById('locationPermissionBtn').addEventListener('click', e => {
+      e.target.closest('.modal').classList.remove('active');
+      navigator.geolocation.getCurrentPosition(() => null);
+    });
+    document.getElementById('locationPermissionModal').classList.add('active');
+    return;
+  }
+
+  // permissionStatus.state == 'denied'
+  document.getElementById('locationPermissionDeniedModal').classList.add('active');
+
+  navigator.geolocation.getCurrentPosition(() => null, () => document.getElementById('locationPermissionModal').classList.add('active'));
+}
+
+function initApp() {
+  document.querySelectorAll('.modal .close').forEach(elem => {
+    elem.addEventListener('click', e => {
+      e.target.closest('.modal').classList.remove('active');
+    })
+  });
+
+  document.querySelector('#waypointPickerModal .reset').addEventListener('click', e => {
+    currentWaypoint = null;
+    updateNavData();
+  });
+
+  document.getElementById('waypointList').addEventListener('click', e => {
+    e.target.closest('.modal').classList.remove('active');
+    currentWaypoint = e.target.dataset;
+    updateNavData();
+  })
+
+  document.getElementById('waypointBtn').addEventListener('click', showWaypointPicker);
+
+  loadWaypoints();
+
+  navigator.permissions.query({name: 'geolocation'}).then(handleLocationPermission);
+
+  if ('wakeLock' in navigator) wakeLock = navigator.wakeLock.request('screen').catch(console.error);
+}
+
+initApp();
