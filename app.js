@@ -14,7 +14,7 @@ document.querySelectorAll('.modal .close').forEach(elem => {
   })
 });
 
-document.querySelector('#waypointSelectorModal .reset').addEventListener('click', e => {
+document.querySelector('#waypointpickerModal .reset').addEventListener('click', e => {
   currentWaypoint = null;
   updateNavData();
 });
@@ -67,7 +67,7 @@ function etaStr(speed, distance) {
   return ret;
 }
 
-function showWaypointSelector() {
+function showWaypointpicker() {
   if (currentCoords !== null) {
     let waypointElems = document.querySelectorAll('div.waypoint');
     waypointElems.forEach(elem => {
@@ -79,7 +79,7 @@ function showWaypointSelector() {
     });
   }
   document.getElementById('waypointList').scrollTop = 0;
-  document.getElementById('waypointSelectorModal').classList.add('active');
+  document.getElementById('waypointpickerModal').classList.add('active');
 }
 
 function formatNumber(n) {
@@ -140,7 +140,7 @@ function updateNavData() {
   }
 }
 
-document.getElementById('waypointBtn').addEventListener('click', showWaypointSelector);
+document.getElementById('waypointBtn').addEventListener('click', showWaypointpicker);
 
 navigator.geolocation.watchPosition(
   position => {
