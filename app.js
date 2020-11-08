@@ -34,15 +34,32 @@ fetch('points.json')
       arrow.classList.add('arrow');
       arrow.innerHTML = '&uarr;'
       elem.appendChild(arrow);
-      let distance = document.createElement('span');
-      distance.classList.add('distance');
-      elem.appendChild(distance);
+      // let distance = document.createElement('span');
+      // distance.classList.add('distance');
+      // elem.appendChild(distance);
       listContainer.appendChild(elem);
     })
   });
 
 function km2mile(x) {
   return x * 0.621371;
+}
+
+function pad2(n) {
+  return ('0' + n).substr(-2);
+}
+
+function etaStr(speed, distance) {
+  if (!speed || !distance) return '--';
+  let eta = Math.round(speed / distance);
+  let ret = pad2(eta % 60) + 's';
+  if (eta = Math.floor(eta / 60)) {
+    ret = pad2(eta % 60) + 'm' + ret;
+    if (eta = Math.floor(eta / 60)) {
+      ret = (eta % 60) + 'h' + ret;
+    }
+  }
+  return ret;
 }
 
 function showWaypointSelector() {
@@ -53,7 +70,7 @@ function showWaypointSelector() {
       let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, elem.dataset.lat, elem.dataset.lon) - currentCoords.heading;
       elem.style.order = Math.round(distance * 10000);
       elem.querySelector('.arrow').style.transform = 'rotate(' + bearing + 'deg)';
-      elem.querySelector('.distance').innerText = '(' + formatNumber(km2mile(distance)) + ' mi)';
+      // elem.querySelector('.distance').innerHTML = '(' + formatNumber(km2mile(distance)) + '&nbsp;mi)';
     });
   }
   document.getElementById('waypointSelectorModal').classList.add('active');
@@ -92,7 +109,7 @@ function newAngle(deg) {
 }
 
 function updateNavData() {
-  document.getElementById('location').innerHTML = currentCoords.latitude.toFixed(6) + ',' + currentCoords.longitude.toFixed(6);
+  document.getElementById('position').innerHTML = currentCoords.latitude.toFixed(6) + ',' + currentCoords.longitude.toFixed(6);
   document.getElementById('speed').innerHTML = formatNumber(km2mile(currentCoords.speed)) + ' mph';
   document.getElementById('heading').innerHTML = Math.round(currentCoords.heading) + '&deg;';
 
@@ -103,7 +120,8 @@ function updateNavData() {
   let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
   let distance = km2mile(GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon));
   document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-  document.getElementById('distance').innerHTML = formatNumber(distance) + ' m';
+  document.getElementById('distance').innerHTML = formatNumber(distance) + ' mi';
+  document.getElementById('eta').innerHTML = etaStr(currentCoords.speed, distance);
   newAngle(bearing);
 }
 
