@@ -14,7 +14,7 @@ document.querySelectorAll('.modal .close').forEach(elem => {
   })
 });
 
-document.querySelector('#waypointpickerModal .reset').addEventListener('click', e => {
+document.querySelector('#waypointPickerModal .reset').addEventListener('click', e => {
   currentWaypoint = null;
   updateNavData();
 });
@@ -79,7 +79,7 @@ function showWaypointPicker() {
     });
   }
   document.getElementById('waypointList').scrollTop = 0;
-  document.getElementById('waypointpickerModal').classList.add('active');
+  document.getElementById('waypointPickerModal').classList.add('active');
 }
 
 function formatNumber(n) {
