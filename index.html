@@ -43,22 +43,29 @@
 
   <body>
     <div class="container">
-      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <svg id="hsiView" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <use href="bg.svg#ticks" />
         <use id="arrow" href="arrow.svg#arrow" class="transition" />
       </svg>
 
+      <div class="larger">Waypoint: <span id="waypoint"></span></div>
       <div class="larger">Bearing: <span id="bearing"></span></div>
       <div class="larger">Distance: <span id="distance"></span></div>
-
-      <div class="larger center">Waypoint: <select id="waypoint"></select></div>
 
       <div class="larger">Location: <span id="location"></span></div>
       <div class="larger">Speed: <span id="speed"></span></div>
       <div class="larger">Heading: <span id="heading"></span></div>
 
-      <script src="app.js"></script>
+      <div id="waypointSelectorModal" class="modal">
+        <div class="modal-content">
+          <div id="waypointList" class="listContainer"></div>
+          <div class="buttons">
+            <button class="close">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
+    <script src="app.js"></script>
   </body>
 
 </html>
