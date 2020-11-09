@@ -43,7 +43,6 @@ function etaStr(distance, speed) {
   if (!distance || !speed) return '--';
   speed /= 3600; // Speed is given in mph but we need seconds
   let eta = Math.round(distance / speed);
-  console.log('ETA: ' + eta + ' seconds');
   let ret = (eta % 60) + 's';
   if (eta = Math.floor(eta / 60)) {
     ret = (eta % 60) + 'm' + ret;
