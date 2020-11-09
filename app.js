@@ -39,16 +39,14 @@ function km2mile(x) {
   return x * 1.60934;
 }
 
-function pad2(n) {
-  return ('0' + n).substr(-2);
-}
-
-function etaStr(speed, distance) {
-  if (!speed || !distance || !Math.round(speed) || !Math.round(distance)) return '--';
-  let eta = Math.round(speed / distance);
-  let ret = pad2(eta % 60) + 's';
+function etaStr(distance, speed) {
+  if (!distance || !speed) return '--';
+  speed /= 3600; // Speed is given in mph but we need seconds
+  let eta = Math.round(distance / speed);
+  console.log('ETA: ' + eta + ' seconds');
+  let ret = (eta % 60) + 's';
   if (eta = Math.floor(eta / 60)) {
-    ret = pad2(eta % 60) + 'm' + ret;
+    ret = (eta % 60) + 'm' + ret;
     if (eta = Math.floor(eta / 60)) {
       ret = (eta % 60) + 'h' + ret;
     }
