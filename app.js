@@ -43,11 +43,11 @@ function etaStr(distance, speed) {
   if (!distance || !speed) return '--';
   speed /= 3600; // Speed is given in mph but we need seconds
   let eta = Math.round(distance / speed);
-  let ret = (eta % 60) + 's';
+  let ret = (eta < 3600) ? (eta % 60) + '<span class="unit">s</span>' : '';
   if (eta = Math.floor(eta / 60)) {
-    ret = (eta % 60) + 'm' + ret;
+    ret = (eta % 60) + '<span class="unit">m</span>' + ret;
     if (eta = Math.floor(eta / 60)) {
-      ret = (eta % 60) + 'h' + ret;
+      ret = (eta % 60) + '<span class="unit">h</span>' + ret;
     }
   }
   return ret;
@@ -83,8 +83,10 @@ function filterWaypoints(text) {
   });
 }
 
-function formatNumber(n) {
-  return Math.round(n * 100) / 100;
+function formatNumber(n, decimals) {
+  if (Number(decimals) != decimals) decimals = 2;
+  let exp = 10 ** decimals;
+  return Math.round(n * exp) / exp;
 }
 
 function rotateArrow(deg) {
@@ -117,7 +119,7 @@ function newAngle(deg) {
 
 function updateNavData() {
   let speed =  km2mile(mps2kmph(currentCoords.speed));
-  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : formatNumber(speed) + ' mph';
+  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : formatNumber(speed, 1) + '<span class="unit">mph</span>';
   document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '&deg;';
 
   if (currentWaypoint === null) {
@@ -135,7 +137,7 @@ function updateNavData() {
     let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
     let distance = km2mile(GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon));
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-    document.getElementById('distance').innerHTML = formatNumber(distance) + ' mi';
+    document.getElementById('distance').innerHTML = formatNumber(distance) + '<span class="unit">mi</span>';
     document.getElementById('eta').innerHTML = etaStr(distance, speed);
     newAngle(bearing);
   }
