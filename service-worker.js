@@ -32,6 +32,18 @@ self.addEventListener('fetch', function(e) {
   );
 });
 
+// Cache first with network fallback (update cache if network succeeds) - This is good for production since this is a static files app
+// self.addEventListener('fetch', function(e) {
+//   e.respondWith(
+//     caches.match(e.request).then(function(response) {
+//       return response || fetch(e.request).then(function(response) {
+//         cache.put(e.request, response.clone());
+//         return response;
+//       });
+//     })
+//   );
+// });
+
 // Cache first with network fallback (not updating cache from network) - This is good for production since this is a static files app
 // self.addEventListener('fetch', function(e) {
 //   e.respondWith(
