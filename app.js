@@ -45,9 +45,9 @@ function etaStr(distance, speed) {
   let eta = Math.round(distance / speed);
   let ret = (eta < 3600) ? (eta % 60) + '<span class="unit">s</span>' : '';
   if (eta = Math.floor(eta / 60)) {
-    ret = (eta % 60) + '<span class="unit">m</span>' + ret;
+    ret = (eta % 60) + '<span class="unit">m</span>' + '<wbr>' + ret;
     if (eta = Math.floor(eta / 60)) {
-      ret = (eta % 60) + '<span class="unit">h</span>' + ret;
+      ret = (eta % 60) + '<span class="unit">h</span>' + '<wbr>' + ret;
     }
   }
   return ret;
@@ -119,8 +119,8 @@ function newAngle(deg) {
 
 function updateNavData() {
   let speed =  km2mile(mps2kmph(currentCoords.speed));
-  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : formatNumber(speed, 1) + '<span class="unit">mph</span>';
-  document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '&deg;';
+  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : formatNumber(speed, 1) + '<wbr><span class="unit">mph</span>';
+  document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '<wbr>&deg;';
 
   if (currentWaypoint === null) {
     document.getElementById('waypointBtn').innerHTML = 'Waypoint';
@@ -137,7 +137,7 @@ function updateNavData() {
     let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
     let distance = km2mile(GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon));
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-    document.getElementById('distance').innerHTML = formatNumber(distance) + '<span class="unit">mi</span>';
+    document.getElementById('distance').innerHTML = formatNumber(distance) + '<wbr><span class="unit">mi</span>';
     document.getElementById('eta').innerHTML = etaStr(distance, speed);
     newAngle(bearing);
   }
