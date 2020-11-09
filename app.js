@@ -137,7 +137,7 @@ function updateNavData() {
     let distance = km2mile(GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon));
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
     document.getElementById('distance').innerHTML = formatNumber(distance) + ' mi';
-    document.getElementById('eta').innerHTML = etaStr(speed, distance);
+    document.getElementById('eta').innerHTML = etaStr(distance, speed);
     newAngle(bearing);
   }
 }
