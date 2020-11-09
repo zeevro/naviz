@@ -114,3 +114,7 @@ div.spacer::before {
   display: flex;
   justify-content: space-evenly;
 }
+
+.hide {
+  display: none;
+}

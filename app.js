@@ -63,8 +63,23 @@ function showWaypointPicker() {
       // elem.querySelector('.distance').innerHTML = '(' + formatNumber(km2mile(distance)) + '&nbsp;mi)';
     });
   }
+  filterWaypoints('');
+  document.getElementById('waypointSearch').value = '';
   document.getElementById('waypointList').scrollTop = 0;
   document.getElementById('waypointPickerModal').classList.add('active');
+}
+
+function filterWaypoints(text) {
+  text = text.trim()
+  let waypoints = document.querySelectorAll('.waypoint');
+  if (!text.length) {
+    waypoints.forEach(elem => elem.classList.remove('hide'));
+    return;
+  }
+  waypoints.forEach(elem => {
+    if (elem.dataset.name.match(text)) elem.classList.remove('hide');
+    else elem.classList.add('hide');
+  });
 }
 
 function formatNumber(n) {
@@ -177,6 +192,10 @@ function initApp() {
     e.target.closest('.modal').classList.remove('active');
     currentWaypoint = e.target.dataset;
     updateNavData();
+  })
+
+  document.getElementById('waypointSearch').addEventListener('input', e => {
+    filterWaypoints(e.target.value);
   })
 
   document.getElementById('waypointBtn').addEventListener('click', showWaypointPicker);
