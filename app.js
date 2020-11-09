@@ -32,7 +32,7 @@ function loadWaypoints() {
 }
 
 function km2mile(x) {
-  return x * 0.621371;
+  return x * 1.60934;
 }
 
 function pad2(n) {
