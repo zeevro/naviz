@@ -100,6 +100,11 @@ div.spacer::before {
 
 .data-field {
   text-align: center;
+  border-radius: 0.2em;
+  background-color: lightgray;
+  min-width: 3em;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
 }
 
 .field-name {
@@ -112,7 +117,7 @@ div.spacer::before {
 
 .row {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 
 .hide {
