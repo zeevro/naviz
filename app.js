@@ -95,7 +95,7 @@ function rotateArrow(deg) {
 
 function newAngle(deg) {
   console.log('newAngle(' + deg + ') currentAngle=' + currentAngle);
-  let arrow = document.getElementById('arrow');
+  // let arrow = document.getElementById('arrow');
   // if (currentAngle > 180 && deg < 180) {
   //   arrow.classList.remove('transition');
   //   rotateArrow(currentAngle - 360);
@@ -146,7 +146,13 @@ function updateNavData() {
 function startLocationWatcher() {
   navigator.geolocation.watchPosition(
     position => {
-      currentCoords = position.coords;
+      // currentCoords = position.coords;
+      currentCoords = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        speed: position.coords.speed >= 1 ? position.coords.speed : null,
+        heading: position.coords.speed >= 1 ? position.coords.heading : 0
+      }
       updateNavData();
     },
     console.error,
