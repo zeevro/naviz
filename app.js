@@ -36,7 +36,7 @@ function mps2kmph(x) {
 }
 
 function km2mile(x) {
-  return x * 1.60934;
+  return x / 1.60934;
 }
 
 function etaStr(distance, speed) {
