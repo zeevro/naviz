@@ -125,7 +125,7 @@ function updateNavData() {
   let speed =  km2mile(mps2kmph(currentCoords.speed));
   document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : formatNumber(speed, 1) + '<wbr><span class="unit">mph</span>';
   document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '<wbr>&deg;';
-  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : Math.round(currentCoords.heading) + '<wbr><span class="unit">ft</span>';
+  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : Math.round(currentCoords.altitude) + '<wbr><span class="unit">ft</span>';
 
   if (currentWaypoint === null) {
     document.getElementById('waypointBtn').innerHTML = 'Waypoint';
@@ -156,7 +156,7 @@ function startLocationWatcher() {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         altitude: position.coords.altitude,
-        speed: position.coords.speed >= 1 ? position.coords.speed : null,
+        speed: position.coords.speed >= 1 ? position.coords.speed : 0,
         heading: position.coords.speed >= 1 ? position.coords.heading : 0
       }
       updateNavData();
