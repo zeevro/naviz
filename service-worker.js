@@ -20,6 +20,8 @@ self.addEventListener('install', function(e) {
 
 // Try network and fall-back to cache (update cache if network succeeds) - This is good for debug or rapidly updating versions
 self.addEventListener('fetch', function(e) {
+  if (e.request.url.includes('google')) return false;
+
   e.respondWith(
     caches.open(cacheName).then(function(cache) {
       return fetch(e.request).then(function(response) {
