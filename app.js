@@ -125,7 +125,7 @@ function updateNavData() {
   let speed =  km2mile(mps2kmph(currentCoords.speed));
   document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : formatNumber(speed, 1) + '<wbr><span class="unit">mph</span>';
   document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '<wbr>&deg;';
-  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : Math.round(currentCoords.altitude) + '<wbr><span class="unit">ft</span>';
+  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : Math.round(m2ft(currentCoords.altitude)) + '<wbr><span class="unit">ft</span>';
 
   if (currentWaypoint === null) {
     document.getElementById('waypointBtn').innerHTML = 'Waypoint';
