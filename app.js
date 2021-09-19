@@ -5,7 +5,6 @@ window.addEventListener("load", () => {
 });
 
 var currentCoords = null;
-var currentAngle = 0;
 var currentWaypoint = null;
 
 function loadWaypoints() {
@@ -101,30 +100,6 @@ function rotateArrow(deg) {
   document.getElementById('arrow').setAttribute('transform', 'rotate(' + deg + ' 100 100)');
 }
 
-function newAngle(deg) {
-  console.log('newAngle(' + deg + ') currentAngle=' + currentAngle);
-  // let arrow = document.getElementById('arrow');
-  // if (currentAngle > 180 && deg < 180) {
-  //   arrow.classList.remove('transition');
-  //   rotateArrow(currentAngle - 360);
-  //   setTimeout(()=> {
-  //     arrow.classList.add('transition')
-  //     rotateArrow(deg);
-  //   } , 1);
-  // } else if (currentAngle < 180 && deg > 180) {
-  //   arrow.classList.remove('transition');
-  //   rotateArrow(currentAngle + 360);
-  //   setTimeout(()=> {
-  //     arrow.classList.add('transition')
-  //     rotateArrow(deg);
-  //   } , 1);
-  // } else {
-  //   rotateArrow(deg);
-  // }
-  rotateArrow(deg);
-  currentAngle = deg;
-}
-
 function updateNavData() {
   let speed =  km2mile(mps2kmph(currentCoords.speed));
   document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : unitValue(formatNumber(speed, 1), 'mph', true);
@@ -141,14 +116,14 @@ function updateNavData() {
     document.getElementById('bearing').innerHTML = '--';
     document.getElementById('distance').innerHTML = '--';
     document.getElementById('eta').innerHTML = '--';
-    newAngle(0);
+    rotateArrow(0);
   } else {
     let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
     let distance = km2mile(GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon));
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
     document.getElementById('distance').innerHTML = unitValue(formatNumber(distance), 'mi', true);
     document.getElementById('eta').innerHTML = etaStr(distance, speed);
-    newAngle(bearing);
+    rotateArrow(bearing);
   }
 }
 
