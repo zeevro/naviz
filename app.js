@@ -102,7 +102,7 @@ function rotateArrow(deg) {
 
 function updateNavData() {
   let speed =  km2mile(mps2kmph(currentCoords.speed));
-  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : unitValue(formatNumber(speed, 1), 'mph', true);
+  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : unitValue(Math.round(speed), 'mph', true);
   document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '&deg;';
   document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : unitValue(Math.round(m2ft(currentCoords.altitude)), 'ft', true);
 
@@ -121,7 +121,7 @@ function updateNavData() {
     let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
     let distance = km2mile(GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon));
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-    document.getElementById('distance').innerHTML = unitValue(formatNumber(distance), 'mi', true);
+    document.getElementById('distance').innerHTML = unitValue(formatNumber(distance, 1), 'mi', true);
     document.getElementById('eta').innerHTML = etaStr(distance, speed);
     rotateArrow(bearing);
   }
