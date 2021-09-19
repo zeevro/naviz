@@ -43,15 +43,19 @@ function m2ft(x) {
   return x * 3.28084;
 }
 
+function unitValue(value, unit, wbr) {
+  return value + (wbr ? '<wbr>' : '') + '<span class="unit">' + unit + '</span>';
+}
+
 function etaStr(distance, speed) {
   if (!distance || !speed) return '--';
   speed /= 3600; // Speed is given in mph but we need seconds
   let eta = Math.round(distance / speed);
-  let ret = (eta < 3600) ? (eta % 60) + '<span class="unit">s</span>' : '';
+  let ret = (eta < 3600) ? unitValue(eta % 60, 's') : '';
   if (eta = Math.floor(eta / 60)) {
-    ret = (eta % 60) + '<span class="unit">m</span>' + '<wbr>' + ret;
+    ret = unitValue(eta % 60, 'm') + '<wbr>' + ret;
     if (eta = Math.floor(eta / 60)) {
-      ret = (eta % 60) + '<span class="unit">h</span>' + '<wbr>' + ret;
+      ret = unitValue(eta % 60, 'h') + '<wbr>' + ret;
     }
   }
   return ret;
@@ -123,9 +127,9 @@ function newAngle(deg) {
 
 function updateNavData() {
   let speed =  km2mile(mps2kmph(currentCoords.speed));
-  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : formatNumber(speed, 1) + '<wbr><span class="unit">mph</span>';
-  document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '<wbr>&deg;';
-  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : Math.round(m2ft(currentCoords.altitude)) + '<wbr><span class="unit">ft</span>';
+  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : unitValue(formatNumber(speed, 1), 'mph', true);
+  document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '&deg;';
+  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : unitValue(Math.round(m2ft(currentCoords.altitude)), 'ft', true);
 
   if (currentWaypoint === null) {
     document.getElementById('waypointBtn').innerHTML = 'Waypoint';
@@ -142,7 +146,7 @@ function updateNavData() {
     let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
     let distance = km2mile(GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon));
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-    document.getElementById('distance').innerHTML = formatNumber(distance) + '<wbr><span class="unit">mi</span>';
+    document.getElementById('distance').innerHTML = unitValue(formatNumber(distance), 'mi', true);
     document.getElementById('eta').innerHTML = etaStr(distance, speed);
     newAngle(bearing);
   }
