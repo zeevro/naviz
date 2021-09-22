@@ -63,7 +63,7 @@ function etaStr(distance, speed) {
 }
 
 function showWaypointPicker() {
-  let distanceUnit = localStorage.getItem('distance_unit');
+  // let distanceUnit = localStorage.getItem('distance_unit');
   if (currentCoords !== null) {
     let waypointElems = document.querySelectorAll('div.waypoint');
     waypointElems.forEach(elem => {
