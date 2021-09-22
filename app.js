@@ -30,18 +30,6 @@ function loadWaypoints() {
     });
 }
 
-function mps2kmph(x) {
-  return x * 3.6;
-}
-
-function km2mile(x) {
-  return x / 1.60934;
-}
-
-function m2ft(x) {
-  return x * 3.28084;
-}
-
 function convertUnit(src, dst, val) {
   const conversions = {
     'km-nm': x => x / 1.852,
@@ -75,6 +63,7 @@ function etaStr(distance, speed) {
 }
 
 function showWaypointPicker() {
+  let distanceUnit = localStorage.getItem('distance_unit');
   if (currentCoords !== null) {
     let waypointElems = document.querySelectorAll('div.waypoint');
     waypointElems.forEach(elem => {
@@ -82,7 +71,7 @@ function showWaypointPicker() {
       let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, elem.dataset.lat, elem.dataset.lon) - currentCoords.heading;
       elem.style.order = Math.round(distance * 10000);
       elem.querySelector('.arrow').style.transform = 'rotate(' + bearing + 'deg)';
-      // elem.querySelector('.distance').innerHTML = '(' + formatNumber(km2mile(distance)) + '&nbsp;mi)';
+      // elem.querySelector('.distance').innerHTML = '(' + formatNumber(convertUnit('km', distanceUnit, distance)) + '&nbsp;' + distanceUnit + ')';
     });
   }
   filterWaypoints('');
@@ -139,7 +128,7 @@ function updateNavData() {
     let distance = GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon);
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
     document.getElementById('distance').innerHTML = unitValue(formatNumber(convertUnit('km', distanceUnit, distance), 1), distanceUnit, true);
-    document.getElementById('eta').innerHTML = etaStr(distance, speed);
+    document.getElementById('eta').innerHTML = etaStr(distance, currentCoords.speed);
     rotateArrow(bearing);
   }
 }
