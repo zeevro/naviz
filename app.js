@@ -94,7 +94,7 @@ function filterWaypoints(text) {
 }
 
 function formatNumber(n, decimals) {
-  if (Number(decimals) != decimals) decimals = 2;
+  if (Number(decimals) != decimals) decimals = 1;
   let exp = 10 ** decimals;
   return Math.round(n * exp) / exp;
 }
@@ -127,7 +127,7 @@ function updateNavData() {
     let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
     let distance = GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon);
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-    document.getElementById('distance').innerHTML = unitValue(formatNumber(convertUnit('km', distanceUnit, distance), 1), distanceUnit, true);
+    document.getElementById('distance').innerHTML = unitValue(formatNumber(convertUnit('km', distanceUnit, distance)), distanceUnit, true);
     document.getElementById('eta').innerHTML = etaStr(distance, currentCoords.speed);
     rotateArrow(bearing);
   }
