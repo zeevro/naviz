@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="GreatCircle.js"></script>
+        <title>Document</title>
+        <style>
+            .container {
+                display: flex;
+                flex-direction: column;
+                overflow: hidden scroll;
+                height: 50vh;
+            }
+
+            .selected {
+                font-weight: bold;
+                background-color: grey;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="container" class="container"></div>
+
+        <script>
+            fetch('points.json')
+                .then(response => response.json())
+                .then(json => {
+                    let container = document.getElementById('container');
+                    json.forEach(p => {
+                        let elem = document.createElement('div');
+                        elem.classList.add('waypoint')
+                        elem.innerText = p.name;
+                        elem.dataset.lat = p.lat;
+                        elem.dataset.lon = p.lon;
+                        elem.addEventListener('click', e => {
+                            document.querySelectorAll('.waypoint.selected').forEach(elem => elem.classList.remove('selected'));
+                            e.target.classList.add('selected');
+                            sortWaypoints(e.target);
+                        });
+                        container.appendChild(elem);
+                    });
+                });
+
+            function sortWaypoints(src) {
+                console.log('Sorting by ' + src.innerText);
+                let elems = document.querySelectorAll('div.waypoint');
+                elems.forEach(elem => {
+                    let distance = GreatCircle.distance(src.dataset.lat, src.dataset.lon, elem.dataset.lat, elem.dataset.lon);
+                    let order = Math.round(distance * 10000);
+                    console.log(elem.innerText, distance, order)
+                    elem.style.order = order;
+                });
+            }
+        </script>
+    </body>
+
+</html>
