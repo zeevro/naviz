@@ -45,8 +45,8 @@ function convertUnit(src, dst, val) {
   return conversions[src + '-' + dst](val);
 }
 
-function unitValue(value, unit, wbr) {
-  return value + (wbr ? '<wbr>' : '') + '<span class="unit">' + unit + '</span>';
+function unitValue(value, unit) {
+  return value + '<span class="unit">' + unit + '</span>';
 }
 
 function etaStr(distance, speed) {
@@ -108,9 +108,9 @@ function updateNavData() {
       distanceUnit = localStorage.getItem('distance_unit'),
       altitudeUnit = localStorage.getItem('altitude_unit');
 
-  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : unitValue(Math.round(convertUnit('mps', speedUnit, currentCoords.speed)), speedUnit, true);
+  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : Math.round(convertUnit('mps', speedUnit, currentCoords.speed));
   document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '&deg;';
-  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : unitValue(Math.round(convertUnit('m', altitudeUnit, currentCoords.altitude)), altitudeUnit, true);
+  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : Math.round(convertUnit('m', altitudeUnit, currentCoords.altitude));
 
   if (currentWaypoint === null) {
     document.getElementById('waypointBtn').innerHTML = 'Waypoint';
@@ -127,7 +127,7 @@ function updateNavData() {
     let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
     let distance = GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon);
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-    document.getElementById('distance').innerHTML = unitValue(formatNumber(convertUnit('km', distanceUnit, distance)), distanceUnit, true);
+    document.getElementById('distance').innerHTML = formatNumber(convertUnit('km', distanceUnit, distance));
     document.getElementById('eta').innerHTML = etaStr(distance, currentCoords.speed);
     rotateArrow(bearing);
   }
@@ -192,6 +192,7 @@ function initApp() {
     if (localStorage.getItem(k) === null) {
       localStorage.setItem(k, unit_defaults[k]);
     }
+    document.getElementById(k).innerText = localStorage.getItem(k);
   }
 
   document.querySelectorAll('.modal .close').forEach(elem => {
@@ -224,6 +225,7 @@ function initApp() {
 
     elem.addEventListener('click', e => {
       localStorage.setItem(e.target.name, e.target.value);
+      document.getElementById(e.target.name).innerText = e.target.value;
       updateNavData();
     })
   });
