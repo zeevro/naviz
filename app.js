@@ -182,17 +182,18 @@ function showSettings() {
 }
 
 function initApp() {
-  let unit_defaults = {
+  let default_settings = {
     speed_unit: 'kts',
     distance_unit: 'nm',
     altitude_unit: 'ft'
   }
 
-  for (k in unit_defaults) {
+  for (k in default_settings) {
     if (localStorage.getItem(k) === null) {
-      localStorage.setItem(k, unit_defaults[k]);
+      localStorage.setItem(k, default_settings[k]);
     }
-    document.getElementById(k).innerText = localStorage.getItem(k);
+    let elem = document.getElementById(k);
+    if (elem !== null) elem.innerText = localStorage.getItem(k);
   }
 
   document.querySelectorAll('.modal .close').forEach(elem => {
