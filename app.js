@@ -51,7 +51,7 @@ function unitValue(value, unit, wbr) {
 
 function etaStr(distance, speed) {
   if (!distance || !speed) return '--';
-  let eta = Math.round(distance / speed);
+  let eta = Math.round((distance * 1000) / speed); // Distance is given in km but we need meters because our speed is in m/s.
   let ret = (eta < 3600) ? unitValue(eta % 60, 's') : '';
   if (eta = Math.floor(eta / 60)) {
     ret = unitValue(eta % 60, 'm') + '<wbr>' + ret;
