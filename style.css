@@ -129,3 +129,17 @@ div.spacer::before {
 .unit {
   font-size: 70%;
 }
+
+#settingsBtn {
+  font-size: large;
+  position: absolute;
+  width: fit-content;
+  top: 0;
+  right: 0;
+  margin: .5em;
+  padding: .5em;
+}
+
+.modal-title {
+  text-decoration: underline;
+}

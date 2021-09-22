@@ -42,13 +42,27 @@ function m2ft(x) {
   return x * 3.28084;
 }
 
+function convertUnit(src, dst, val) {
+  const conversions = {
+    'km-nm': x => x / 1.852,
+    'km-mi': x => x / 1.60934,
+    'mps-kts': x => x * 1.94384,
+    'mps-mph': x => x * 2.23694,
+    'mps-kph': x => x * 3.6,
+    'm-ft': x => x * 3.28084
+  }
+
+  if (src == dst) return val;
+
+  return conversions[src + '-' + dst](val);
+}
+
 function unitValue(value, unit, wbr) {
   return value + (wbr ? '<wbr>' : '') + '<span class="unit">' + unit + '</span>';
 }
 
 function etaStr(distance, speed) {
   if (!distance || !speed) return '--';
-  speed /= 3600; // Speed is given in mph but we need seconds
   let eta = Math.round(distance / speed);
   let ret = (eta < 3600) ? unitValue(eta % 60, 's') : '';
   if (eta = Math.floor(eta / 60)) {
@@ -101,10 +115,13 @@ function rotateArrow(deg) {
 }
 
 function updateNavData() {
-  let speed =  km2mile(mps2kmph(currentCoords.speed));
-  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : unitValue(Math.round(speed), 'mph', true);
+  let speedUnit = localStorage.getItem('speed_unit'),
+      distanceUnit = localStorage.getItem('distance_unit'),
+      altitudeUnit = localStorage.getItem('altitude_unit');
+
+  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : unitValue(Math.round(convertUnit('mps', speedUnit, currentCoords.speed)), speedUnit, true);
   document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '&deg;';
-  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : unitValue(Math.round(m2ft(currentCoords.altitude)), 'ft', true);
+  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : unitValue(Math.round(convertUnit('m', altitudeUnit, currentCoords.altitude)), altitudeUnit, true);
 
   if (currentWaypoint === null) {
     document.getElementById('waypointBtn').innerHTML = 'Waypoint';
@@ -119,9 +136,9 @@ function updateNavData() {
     rotateArrow(0);
   } else {
     let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
-    let distance = km2mile(GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon));
+    let distance = GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon);
     document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-    document.getElementById('distance').innerHTML = unitValue(formatNumber(distance, 1), 'mi', true);
+    document.getElementById('distance').innerHTML = unitValue(formatNumber(convertUnit('km', distanceUnit, distance), 1), distanceUnit, true);
     document.getElementById('eta').innerHTML = etaStr(distance, speed);
     rotateArrow(bearing);
   }
@@ -171,7 +188,23 @@ function handleLocationPermission(permissionStatus) {
   navigator.geolocation.getCurrentPosition(() => null, () => document.getElementById('locationPermissionModal').classList.add('active'));
 }
 
+function showSettings() {
+  document.getElementById('settingsModal').classList.add('active');
+}
+
 function initApp() {
+  let unit_defaults = {
+    speed_unit: 'kts',
+    distance_unit: 'nm',
+    altitude_unit: 'ft'
+  }
+
+  for (k in unit_defaults) {
+    if (localStorage.getItem(k) === null) {
+      localStorage.setItem(k, unit_defaults[k]);
+    }
+  }
+
   document.querySelectorAll('.modal .close').forEach(elem => {
     elem.addEventListener('click', e => {
       e.target.closest('.modal').classList.remove('active');
@@ -187,13 +220,26 @@ function initApp() {
     e.target.closest('.modal').classList.remove('active');
     currentWaypoint = e.target.dataset;
     updateNavData();
-  })
+  });
 
   document.getElementById('waypointSearch').addEventListener('input', e => {
     filterWaypoints(e.target.value);
-  })
+  });
 
   document.getElementById('waypointBtn').addEventListener('click', showWaypointPicker);
+
+  document.querySelectorAll('#settingsModal input[type="radio"]').forEach(elem => {
+    if (localStorage.getItem(elem.name) == elem.value) {
+      elem.checked = true;
+    }
+
+    elem.addEventListener('click', e => {
+      localStorage.setItem(e.target.name, e.target.value);
+      updateNavData();
+    })
+  });
+
+  document.getElementById('settingsBtn').addEventListener('click', showSettings);
 
   loadWaypoints();
 

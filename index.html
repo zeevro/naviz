@@ -53,7 +53,10 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6ZN5LQ"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+
     <div class="container">
+      <button id="settingsBtn">⚙️</button>
+
       <svg id="hsiView" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <use href="bg.svg#ticks" />
         <use id="arrow" href="arrow.svg#arrow" />
@@ -123,7 +126,33 @@
           This app does not work without location permissions. You must grant the app this permission in order to use it.
         </div>
       </div>
+
+      <div id="settingsModal" class="modal">
+        <div class="modal-content">
+          <span class="modal-title">Speed units:</span>
+          <label><input type="radio" name="speed_unit" value="kts">Knots</label>
+          <label><input type="radio" name="speed_unit" value="mph">MPH</label>
+          <label><input type="radio" name="speed_unit" value="kph">KM/H</label>
+          <div class="spacer"></div>
+
+          <span class="modal-title">Distance units:</span>
+          <label><input type="radio" name="distance_unit" value="nm">Nautical miles</label>
+          <label><input type="radio" name="distance_unit" value="mi">Statute miles</label>
+          <label><input type="radio" name="distance_unit" value="km">Kilometers</label>
+          <div class="spacer"></div>
+
+          <span class="modal-title">Altitude units:</span>
+          <label><input type="radio" name="altitude_unit" value="ft">Feet</label>
+          <label><input type="radio" name="altitude_unit" value="m">Meters</label>
+          <div class="spacer"></div>
+
+          <div class="buttons">
+            <button class="close">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
+
     <script src="app.js"></script>
   </body>
 
