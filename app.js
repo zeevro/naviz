@@ -7,11 +7,13 @@ window.addEventListener("load", () => {
 var currentCoords = null;
 var currentWaypoint = null;
 
-function waypointStr(wpt) {
-  return wpt.name + (wpt.kind == 'ARP' ? ' ✈' : '');
-}
-
 function loadWaypoints() {
+  const kinds = {
+    'CRP': '▲',
+    'NCRP': '△',
+    'ARP': '✈'
+  }
+
   fetch('points.json')
     .then(response => response.json())
     .then(points => {
@@ -19,18 +21,11 @@ function loadWaypoints() {
       points.sort((a, b) => a.name.localeCompare(b.name));
       points.forEach(p => {
         let elem = document.createElement('div');
-        elem.classList.add('waypoint')
+        elem.classList.add('waypoint');
         Object.assign(elem.dataset, p);
-        elem.innerText = waypointStr(p);
-        let arrow = document.createElement('div');
-        arrow.classList.add('arrow');
-        arrow.innerHTML = '&uarr;'
-        elem.appendChild(arrow);
-        // let distance = document.createElement('span');
-        // distance.classList.add('distance');
-        // elem.appendChild(distance);
+        elem.innerHTML = '<span class="kind-symbol">' + (p.kind in kinds ? kinds[p.kind] : '&nbsp;') + '</span>' + p.name + '<div class="arrow">&uarr;</div>';
         listContainer.appendChild(elem);
-      })
+      });
     });
 }
 

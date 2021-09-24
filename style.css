@@ -87,6 +87,12 @@ div.spacer::before {
   font-size: medium;
 }
 
+.waypoint .kind-symbol {
+  font-size: 70%;
+  margin-inline: 0.2em;
+  vertical-align: baseline;
+}
+
 .modal .buttons * {
   font-size: xx-large;
   float: right;
