@@ -19,7 +19,7 @@ function loadWaypoints() {
   const kinds = {
     'CRP': '▲',
     'NCRP': '△',
-    'ARP': '✈'
+    'ARP': '✈&#xfe0e;'
   }
 
   fetch('points.json')
