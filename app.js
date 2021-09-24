@@ -4,6 +4,14 @@ window.addEventListener("load", () => {
   }
 });
 
+const speedField = document.getElementById('speed');
+const headingField = document.getElementById('heading');
+const altitudeField = document.getElementById('altitude');
+const bearingField = document.getElementById('bearing');
+const distanceField = document.getElementById('distance');
+const etaField = document.getElementById('eta');
+const waypointBtn = document.getElementById('waypointBtn');
+
 var currentCoords = null;
 var currentWaypoint = null;
 
@@ -48,6 +56,10 @@ function unitValue(value, unit) {
   return value + '<span class="unit">' + unit + '</span>';
 }
 
+function degStr(deg) {
+  return Math.round(deg % 360 + 360) % 360 + '&deg;';
+}
+
 function etaStr(distance, speed) {
   if (!distance || !speed) return '--';
   let eta = Math.round((distance * 1000) / speed); // Distance is given in km but we need meters because our speed is in m/s.
@@ -62,6 +74,10 @@ function etaStr(distance, speed) {
 }
 
 function showWaypointPicker() {
+  const waypointSearch = document.getElementById('waypointSearch');
+  const waypointList = document.getElementById('waypointList');
+  const waypointPickerModal = document.getElementById('waypointPickerModal');
+
   // let distanceUnit = localStorage.getItem('distance_unit');
   if (currentCoords !== null) {
     let waypointElems = document.querySelectorAll('div.waypoint');
@@ -74,9 +90,9 @@ function showWaypointPicker() {
     });
   }
   filterWaypoints('');
-  document.getElementById('waypointSearch').value = '';
-  document.getElementById('waypointList').scrollTop = 0;
-  document.getElementById('waypointPickerModal').classList.add('active');
+  waypointSearch.value = '';
+  waypointList.scrollTop = 0;
+  waypointPickerModal.classList.add('active');
 }
 
 function filterWaypoints(text) {
@@ -99,37 +115,30 @@ function formatNumber(n, decimals) {
 }
 
 function rotateArrow(deg) {
-  document.getElementById('arrow').setAttribute('transform', 'rotate(' + deg + ' 100 100)');
+  const arrow = document.getElementById('arrow');
+
+  arrow.setAttribute('transform', 'rotate(' + deg + ' 100 100)');
 }
 
 function updateNavData() {
-  let speedUnit = localStorage.getItem('speed_unit'),
-      distanceUnit = localStorage.getItem('distance_unit'),
-      altitudeUnit = localStorage.getItem('altitude_unit');
+  let speedUnit = localStorage.getItem('speed_unit');
+  let distanceUnit = localStorage.getItem('distance_unit');
+  let altitudeUnit = localStorage.getItem('altitude_unit');
 
-  document.getElementById('speed').innerHTML = currentCoords.speed === null ? '--' : Math.round(convertUnit('mps', speedUnit, currentCoords.speed));
-  document.getElementById('heading').innerHTML = currentCoords.heading === null ? '--' : Math.round(currentCoords.heading) + '&deg;';
-  document.getElementById('altitude').innerHTML = currentCoords.altitude === null ? '--' : Math.round(convertUnit('m', altitudeUnit, currentCoords.altitude));
+  speedField.innerHTML = currentCoords.speed === null ? '--' : Math.round(convertUnit('mps', speedUnit, currentCoords.speed));
+  headingField.innerHTML = currentCoords.heading === null ? '--' : degStr(currentCoords.heading);
+  altitudeField.innerHTML = currentCoords.altitude === null ? '--' : Math.round(convertUnit('m', altitudeUnit, currentCoords.altitude));
 
-  if (currentWaypoint === null) {
-    document.getElementById('waypointBtn').innerHTML = 'Waypoint';
-  } else {
-    document.getElementById('waypointBtn').innerHTML = currentWaypoint.name;
-  }
+  if (currentWaypoint === null || currentCoords === null) return;
 
-  if (currentWaypoint === null || currentCoords === null) {
-    document.getElementById('bearing').innerHTML = '--';
-    document.getElementById('distance').innerHTML = '--';
-    document.getElementById('eta').innerHTML = '--';
-    rotateArrow(0);
-  } else {
-    let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
-    let distance = GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon);
-    document.getElementById('bearing').innerHTML = Math.round(bearing + 360) % 360 + '&deg;';
-    document.getElementById('distance').innerHTML = formatNumber(convertUnit('km', distanceUnit, distance));
-    document.getElementById('eta').innerHTML = etaStr(distance, currentCoords.speed);
-    rotateArrow(bearing);
-  }
+  let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon) - currentCoords.heading;
+  let distance = GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, currentWaypoint.lat, currentWaypoint.lon);
+
+  bearingField.innerHTML = degStr(bearing);
+  distanceField.innerHTML = formatNumber(convertUnit('km', distanceUnit, distance));
+  etaField.innerHTML = etaStr(distance, currentCoords.speed);
+
+  rotateArrow(bearing);
 }
 
 function startLocationWatcher() {
@@ -203,12 +212,23 @@ function initApp() {
 
   document.querySelector('#waypointPickerModal .reset').addEventListener('click', e => {
     currentWaypoint = null;
-    updateNavData();
+
+    waypointBtn.innerHTML = 'Waypoint';
+
+    bearingField.innerHTML = '--';
+    distanceField.innerHTML = '--';
+    etaField.innerHTML = '--';
+
+    rotateArrow(0);
   });
 
   document.getElementById('waypointList').addEventListener('click', e => {
     e.target.closest('.modal').classList.remove('active');
+
     currentWaypoint = e.target.closest('.waypoint').dataset;
+
+    waypointBtn.innerHTML = currentWaypoint.name
+
     updateNavData();
   });
 
