@@ -4,14 +4,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="GreatCircle.js"></script>
         <title>Document</title>
         <style>
             .container {
                 display: flex;
                 flex-direction: column;
-                overflow: hidden scroll;
-                height: 50vh;
             }
 
             .selected {
@@ -24,8 +21,10 @@
     <body>
         <div id="container" class="container"></div>
 
-        <script>
-            fetch('points.json')
+        <script type="module">
+            import '../GreatCircle.js';
+
+            fetch('../points.json')
                 .then(response => response.json())
                 .then(json => {
                     let container = document.getElementById('container');
@@ -39,6 +38,7 @@
                             document.querySelectorAll('.waypoint.selected').forEach(elem => elem.classList.remove('selected'));
                             e.target.classList.add('selected');
                             sortWaypoints(e.target);
+                            document.documentElement.scrollTop = 0;
                         });
                         container.appendChild(elem);
                     });
