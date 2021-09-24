@@ -7,6 +7,10 @@ window.addEventListener("load", () => {
 var currentCoords = null;
 var currentWaypoint = null;
 
+function waypointStr(wpt) {
+  return wpt.name + (wpt.kind == 'ARP' ? ' ✈' : '');
+}
+
 function loadWaypoints() {
   fetch('points.json')
     .then(response => response.json())
@@ -17,7 +21,7 @@ function loadWaypoints() {
         let elem = document.createElement('div');
         elem.classList.add('waypoint')
         Object.assign(elem.dataset, p);
-        elem.innerText = p.name;
+        elem.innerText = waypointStr(p);
         let arrow = document.createElement('div');
         arrow.classList.add('arrow');
         arrow.innerHTML = '&uarr;'
