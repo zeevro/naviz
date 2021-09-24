@@ -185,10 +185,6 @@ function handleLocationPermission(permissionStatus) {
   navigator.geolocation.getCurrentPosition(() => null, () => document.getElementById('locationPermissionModal').classList.add('active'));
 }
 
-function showSettings() {
-  document.getElementById('settingsModal').classList.add('active');
-}
-
 function initApp() {
   let default_settings = {
     speed_unit: 'kts',
@@ -250,7 +246,9 @@ function initApp() {
     })
   });
 
-  document.getElementById('settingsBtn').addEventListener('click', showSettings);
+  document.getElementById('settingsBtn').addEventListener('click', () => {
+    document.getElementById('settingsModal').classList.add('active');
+  });
 
   loadWaypoints();
 
