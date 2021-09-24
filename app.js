@@ -31,7 +31,7 @@ function loadWaypoints() {
         let elem = document.createElement('div');
         elem.classList.add('waypoint');
         Object.assign(elem.dataset, p);
-        elem.innerHTML = '<span class="kind-symbol">' + (p.kind in kinds ? kinds[p.kind] : '&nbsp;') + '</span>' + p.name + '<div class="arrow">&uarr;</div>';
+        elem.innerHTML = '<span class="kind-symbol">' + (p.kind in kinds ? kinds[p.kind] : '&nbsp;') + '</span><span class="name">' + p.name + '</span><span class="arrow">&uarr;</span>';
         listContainer.appendChild(elem);
       });
     });
@@ -204,6 +204,12 @@ function initApp() {
     elem.addEventListener('click', e => {
       e.target.closest('.modal').classList.remove('active');
     })
+  });
+
+  document.querySelectorAll('.modal').forEach(elem => {
+    elem.addEventListener('click', e => {
+      if (e.target == elem) elem.classList.remove('active');
+    });
   });
 
   document.querySelector('#waypointPickerModal .reset').addEventListener('click', e => {
