@@ -208,7 +208,7 @@ function initApp() {
 
   document.getElementById('waypointList').addEventListener('click', e => {
     e.target.closest('.modal').classList.remove('active');
-    currentWaypoint = e.target.dataset;
+    currentWaypoint = e.target.closest('.waypoint').dataset;
     updateNavData();
   });
 
