@@ -20,7 +20,7 @@ function loadWaypoints() {
     'CRP': '▲',
     'NCRP': '△',
     'ARP': '✈&#xfe0e;'
-  }
+  };
 
   fetch('points.json')
     .then(response => response.json())
@@ -45,7 +45,7 @@ function convertUnit(src, dst, val) {
     'mps-mph': x => x * 2.23694,
     'mps-kph': x => x * 3.6,
     'm-ft': x => x * 3.28084
-  }
+  };
 
   if (src == dst) return val;
 
@@ -62,10 +62,13 @@ function degStr(deg) {
 
 function etaStr(distance, speed) {
   if (!distance || !speed) return '--';
+
   let eta = Math.round((distance * 1000) / speed); // Distance is given in km but we need meters because our speed is in m/s.
   let ret = (eta < 3600) ? unitValue(eta % 60, 's') : '';
+
   if (eta = Math.floor(eta / 60)) {
     ret = unitValue(eta % 60, 'm') + '<wbr>' + ret;
+
     if (eta = Math.floor(eta / 60)) {
       ret = unitValue(eta % 60, 'h') + '<wbr>' + ret;
     }
@@ -84,24 +87,31 @@ function showWaypointPicker() {
     waypointElems.forEach(elem => {
       let distance = GreatCircle.distance(currentCoords.latitude, currentCoords.longitude, elem.dataset.lat, elem.dataset.lon);
       let bearing = GreatCircle.bearing(currentCoords.latitude, currentCoords.longitude, elem.dataset.lat, elem.dataset.lon) - currentCoords.heading;
+
       elem.style.order = Math.round(distance * 10000);
       elem.querySelector('.arrow').style.transform = 'rotate(' + bearing + 'deg)';
       // elem.querySelector('.distance').innerHTML = '(' + formatNumber(convertUnit('km', distanceUnit, distance)) + '&nbsp;' + distanceUnit + ')';
     });
   }
+
   filterWaypoints('');
+
   waypointSearch.value = '';
   waypointList.scrollTop = 0;
+
   waypointPickerModal.classList.add('active');
 }
 
 function filterWaypoints(text) {
-  text = text.trim()
   let waypoints = document.querySelectorAll('.waypoint');
+
+  text = text.trim()
+
   if (!text.length) {
     waypoints.forEach(elem => elem.classList.remove('hide'));
     return;
   }
+
   waypoints.forEach(elem => {
     if (elem.dataset.name.match(text)) elem.classList.remove('hide');
     else elem.classList.add('hide');
@@ -151,7 +161,7 @@ function startLocationWatcher() {
         altitude: position.coords.altitude,
         speed: position.coords.speed >= 1 ? position.coords.speed : 0,
         heading: position.coords.speed >= 1 ? position.coords.heading : 0
-      }
+      };
       updateNavData();
     },
     console.error,
@@ -186,16 +196,17 @@ function handleLocationPermission(permissionStatus) {
 }
 
 function initApp() {
-  let default_settings = {
+  const default_settings = {
     speed_unit: 'kts',
     distance_unit: 'nm',
     altitude_unit: 'ft'
-  }
+  };
 
   for (k in default_settings) {
     if (localStorage.getItem(k) === null) {
       localStorage.setItem(k, default_settings[k]);
     }
+
     let elem = document.getElementById(k);
     if (elem !== null) elem.innerText = localStorage.getItem(k);
   }
@@ -212,7 +223,7 @@ function initApp() {
     });
   });
 
-  document.querySelector('#waypointPickerModal .reset').addEventListener('click', e => {
+  document.querySelector('#waypointPickerModal .reset').addEventListener('click', () => {
     currentWaypoint = null;
 
     waypointBtn.innerHTML = 'Waypoint';
@@ -229,7 +240,7 @@ function initApp() {
 
     currentWaypoint = e.target.closest('.waypoint').dataset;
 
-    waypointBtn.innerHTML = currentWaypoint.name
+    waypointBtn.innerHTML = currentWaypoint.name;
 
     updateNavData();
   });
@@ -249,7 +260,7 @@ function initApp() {
       localStorage.setItem(e.target.name, e.target.value);
       document.getElementById(e.target.name).innerText = e.target.value;
       updateNavData();
-    })
+    });
   });
 
   document.getElementById('settingsBtn').addEventListener('click', () => {
@@ -258,7 +269,7 @@ function initApp() {
 
   loadWaypoints();
 
-  navigator.permissions.query({name: 'geolocation'}).then(handleLocationPermission);
+  navigator.permissions.query({ name: 'geolocation' }).then(handleLocationPermission);
 
   if ('wakeLock' in navigator) wakeLock = navigator.wakeLock.request('screen').catch(console.error);
 }
