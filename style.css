@@ -65,6 +65,7 @@ div.spacer::before {
 }
 
 .listContainer {
+  /* Has to be flex for sorting to work */
   display: flex;
   flex-direction: column;
   overflow: hidden scroll;
@@ -72,7 +73,7 @@ div.spacer::before {
 }
 
 .waypoint {
-  font-size: xx-large;
+  margin-bottom: 0.1em;
 }
 
 .waypoint .arrow {
@@ -90,7 +91,6 @@ div.spacer::before {
 .waypoint .kind-symbol {
   font-size: 70%;
   margin-inline: 0.2em;
-  vertical-align: baseline;
 }
 
 .modal .buttons * {
